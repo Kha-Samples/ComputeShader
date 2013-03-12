@@ -23,15 +23,12 @@ class Shader extends Game {
 		vertexShader = kha.Sys.graphics.createVertexShader(Loader.the.getShader("shader.vert").toString());
 		fragmentShader = kha.Sys.graphics.createFragmentShader(Loader.the.getShader("shader.frag").toString());
 		var structure = new VertexStructure();
-		structure.add("pos", VertexData.Float2, VertexType.Position);
+		structure.add("pos", VertexData.Float3, VertexType.Position);
 		vertices = kha.Sys.graphics.createVertexBuffer(3, structure);
 		var v = vertices.lock();
-		v[0] = -1;
-		v[1] = -1;
-		v[2] = 1;
-		v[3] = -1;
-		v[4] = -1;
-		v[5] = 1;
+		v[0] = -1; v[1] = -1; v[2] = 0;
+		v[3] = 1;  v[4] = -1; v[5] = 0;
+		v[6] = -1; v[7] = 1;  v[8] = 0;
 		vertices.unlock();
 	}
 	
