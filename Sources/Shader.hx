@@ -26,9 +26,9 @@ class Shader extends Game {
 		structure.add("pos", VertexData.Float3, VertexType.Position);
 		vertices = kha.Sys.graphics.createVertexBuffer(3, structure);
 		var v = vertices.lock();
-		v[0] = -1; v[1] = -1; v[2] = 0;
-		v[3] = 1;  v[4] = -1; v[5] = 0;
-		v[6] = -1; v[7] = 1;  v[8] = 0;
+		v[0] = -1; v[1] = -1; v[2] = 0.5;
+		v[3] = 1;  v[4] = -1; v[5] = 0.5;
+		v[6] = -1; v[7] = 1;  v[8] = 0.5;
 		vertices.unlock();
 	}
 	
