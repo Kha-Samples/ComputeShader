@@ -24,8 +24,8 @@ class Shader extends Game {
 	}
 	
 	override public function loadFinished(): Void {
-		vertexShader = kha.Sys.graphics.createVertexShader(Loader.the.getShader("shader.vert").toString());
-		fragmentShader = kha.Sys.graphics.createFragmentShader(Loader.the.getShader("shader.frag").toString());
+		vertexShader = kha.Sys.graphics.createVertexShader(Loader.the.getShader("shader.vert"));
+		fragmentShader = kha.Sys.graphics.createFragmentShader(Loader.the.getShader("shader.frag"));
 		var structure = new VertexStructure();
 		structure.add("pos", VertexData.Float3, VertexType.Position);
 		program = kha.Sys.graphics.createProgram();
