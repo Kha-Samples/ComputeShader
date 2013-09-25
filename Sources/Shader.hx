@@ -8,7 +8,6 @@ import kha.graphics.VertexBuffer;
 import kha.graphics.VertexData;
 import kha.graphics.VertexShader;
 import kha.graphics.VertexStructure;
-import kha.graphics.VertexType;
 import kha.Loader;
 import kha.Painter;
 
@@ -23,11 +22,11 @@ class Shader extends Game {
 		super("Shader", false);
 	}
 	
-	override public function loadFinished(): Void {
+	override public function init(): Void {
 		vertexShader = kha.Sys.graphics.createVertexShader(Loader.the.getShader("shader.vert"));
 		fragmentShader = kha.Sys.graphics.createFragmentShader(Loader.the.getShader("shader.frag"));
 		var structure = new VertexStructure();
-		structure.add("pos", VertexData.Float3, VertexType.Position);
+		structure.add("pos", VertexData.Float3);
 		program = kha.Sys.graphics.createProgram();
 		program.setVertexShader(vertexShader);
 		program.setFragmentShader(fragmentShader);
