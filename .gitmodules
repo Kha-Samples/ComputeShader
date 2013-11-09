@@ -2,7 +2,3 @@
 	path = Kha
 	url = ../Kha
 	branch = master
-[submodule "Kore"]
-	path = Kore
-	url = ../Kore
-	branch = master
