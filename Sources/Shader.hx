@@ -4,6 +4,7 @@ import kha.Game;
 import kha.graphics.FragmentShader;
 import kha.graphics.IndexBuffer;
 import kha.graphics.Program;
+import kha.graphics.Usage;
 import kha.graphics.VertexBuffer;
 import kha.graphics.VertexData;
 import kha.graphics.VertexShader;
@@ -32,14 +33,14 @@ class Shader extends Game {
 		program.setFragmentShader(fragmentShader);
 		program.link(structure);
 		
-		vertices = kha.Sys.graphics.createVertexBuffer(3, structure);
+		vertices = kha.Sys.graphics.createVertexBuffer(3, structure, Usage.StaticUsage);
 		var v = vertices.lock();
 		v[0] = -1; v[1] = -1; v[2] = 0.5;
 		v[3] = 1;  v[4] = -1; v[5] = 0.5;
 		v[6] = -1; v[7] = 1;  v[8] = 0.5;
 		vertices.unlock();
 		
-		indices = kha.Sys.graphics.createIndexBuffer(3);
+		indices = kha.Sys.graphics.createIndexBuffer(3, Usage.StaticUsage);
 		var i = indices.lock();
 		i[0] = 0; i[1] = 1; i[2] = 2;
 		indices.unlock();
