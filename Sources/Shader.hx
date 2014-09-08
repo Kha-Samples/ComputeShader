@@ -1,16 +1,16 @@
 package;
 
+import kha.Framebuffer;
 import kha.Game;
-import kha.graphics.FragmentShader;
-import kha.graphics.IndexBuffer;
-import kha.graphics.Program;
-import kha.graphics.Usage;
-import kha.graphics.VertexBuffer;
-import kha.graphics.VertexData;
-import kha.graphics.VertexShader;
-import kha.graphics.VertexStructure;
+import kha.graphics4.FragmentShader;
+import kha.graphics4.IndexBuffer;
+import kha.graphics4.Program;
+import kha.graphics4.Usage;
+import kha.graphics4.VertexBuffer;
+import kha.graphics4.VertexData;
+import kha.graphics4.VertexShader;
+import kha.graphics4.VertexStructure;
 import kha.Loader;
-import kha.Painter;
 
 class Shader extends Game {
 	private var vertexShader: VertexShader;
@@ -24,32 +24,35 @@ class Shader extends Game {
 	}
 	
 	override public function init(): Void {
-		vertexShader = kha.Sys.graphics.createVertexShader(Loader.the.getShader("shader.vert"));
-		fragmentShader = kha.Sys.graphics.createFragmentShader(Loader.the.getShader("shader.frag"));
+		vertexShader = new VertexShader(Loader.the.getShader("shader.vert"));
+		fragmentShader = new FragmentShader(Loader.the.getShader("shader.frag"));
 		var structure = new VertexStructure();
 		structure.add("pos", VertexData.Float3);
-		program = kha.Sys.graphics.createProgram();
+		program = new Program();
 		program.setVertexShader(vertexShader);
 		program.setFragmentShader(fragmentShader);
 		program.link(structure);
 		
-		vertices = kha.Sys.graphics.createVertexBuffer(3, structure, Usage.StaticUsage);
+		vertices = new VertexBuffer(3, structure, Usage.StaticUsage);
 		var v = vertices.lock();
 		v[0] = -1; v[1] = -1; v[2] = 0.5;
 		v[3] = 1;  v[4] = -1; v[5] = 0.5;
 		v[6] = -1; v[7] = 1;  v[8] = 0.5;
 		vertices.unlock();
 		
-		indices = kha.Sys.graphics.createIndexBuffer(3, Usage.StaticUsage);
+		indices = new IndexBuffer(3, Usage.StaticUsage);
 		var i = indices.lock();
 		i[0] = 0; i[1] = 1; i[2] = 2;
 		indices.unlock();
 	}
 	
-	override public function render(painter: Painter): Void {
-		kha.Sys.graphics.setProgram(program);
-		kha.Sys.graphics.setVertexBuffer(vertices);
-		kha.Sys.graphics.setIndexBuffer(indices);
-		kha.Sys.graphics.drawIndexedVertices();
+	override public function render(frame: Framebuffer): Void {
+		var g = frame.g4;
+		g.begin();
+		g.setProgram(program);
+		g.setVertexBuffer(vertices);
+		g.setIndexBuffer(indices);
+		g.drawIndexedVertices();
+		g.end();
 	}
 }
