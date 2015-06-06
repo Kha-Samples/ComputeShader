@@ -1,17 +1,10 @@
 {
-"format": 1,
-"game":
-{
-"name": "Shader",
-"width": 640,
-"height": 480
-},
-"assets":
-[
-
-],
-"rooms":
-[
-
-]
+	"format": 2,
+	"game": {
+		"name": "Shader",
+		"width": 640,
+		"height": 480
+	},
+	"assets": [],
+	"rooms": []
 }
