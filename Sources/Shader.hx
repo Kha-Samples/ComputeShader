@@ -1,5 +1,6 @@
 package;
 
+import kha.Color;
 import kha.Framebuffer;
 import kha.Game;
 import kha.graphics4.FragmentShader;
@@ -49,6 +50,7 @@ class Shader extends Game {
 	override public function render(frame: Framebuffer): Void {
 		var g = frame.g4;
 		g.begin();
+		g.clear(Color.Black);
 		g.setProgram(program);
 		g.setVertexBuffer(vertices);
 		g.setIndexBuffer(indices);
