@@ -18,7 +18,7 @@ class Main {
 	private static var indices: IndexBuffer;
 	
 	public static function main(): Void {
-		System.init("Shader", 640, 480, function () {
+		System.init({title: "Shader", width: 640, height: 480}, function () {
 			var structure = new VertexStructure();
 			structure.add("pos", VertexData.Float3);
 			
