@@ -1,5 +1,10 @@
 attribute vec3 pos;
+attribute vec2 tex;
 
-void main() {
-	gl_Position = vec4(pos.x, pos.y, 0.5, 1.0);
+varying vec2 texcoord;
+uniform mat4 mvp;
+
+void kore() {
+	gl_Position = mvp * vec4(pos.xy, 0.5, 1.0);
+	texcoord = tex;
 }

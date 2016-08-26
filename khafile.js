@@ -1,4 +1,4 @@
-let project = new Project('Shader');
+let project = new Project('ComputeShader');
 
 project.addSources('Sources');
 
