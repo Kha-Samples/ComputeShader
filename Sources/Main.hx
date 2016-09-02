@@ -31,11 +31,11 @@ class Main {
 	private static var computeLocation: kha.compute.ConstantLocation;
 	
 	public static function main(): Void {
-		System.init({title: "ComputeShader", width: 640, height: 480}, function () {
-			texture = Image.create(256, 256, TextureFormat.RGBA128);
+		System.init({title: "ComputeShader", width: 512, height: 512}, function () {
+			texture = Image.create(512, 512, TextureFormat.RGBA128);
 			
 			computeTexunit = Shaders.test_comp.getTextureUnit("destTex");
-			computeLocation = Shaders.test_comp.getConstantLocation("roll");
+			computeLocation = Shaders.test_comp.getConstantLocation("sine");
 			
 			var structure = new VertexStructure();
 			structure.add("pos", VertexData.Float3);
@@ -50,17 +50,21 @@ class Main {
 			texunit = pipeline.getTextureUnit("texsampler");
 			offset = pipeline.getConstantLocation("mvp");
 
-			vertices = new VertexBuffer(3, structure, Usage.StaticUsage);
+			vertices = new VertexBuffer(6, structure, Usage.StaticUsage);
 			var v = vertices.lock();
-			v.set(0, -1.0); v.set(1, -1.0); v.set(2, 0.5); v.set(3, 0.0); v.set(4, 1.0);
-			v.set(5, 1.0); v.set(6, -1.0); v.set(7, 0.5); v.set(8, 1.0); v.set(9, 1.0);
-			v.set(10, -1.0); v.set(11, 1.0); v.set(12, 0.5); v.set(13, 0.0); v.set(14, 0.0);
+			v.set(0, -1.0); v.set(1, -1.0); v.set(2, 0.5); v.set(3, 0.0); v.set(4, 0.0);
+			v.set(5, 1.0); v.set(6, -1.0); v.set(7, 0.5); v.set(8, 1.0); v.set(9, 0.0);
+			v.set(10, -1.0); v.set(11, 1.0); v.set(12, 0.5); v.set(13, 0.0); v.set(14, 1.0);
 
+			v.set(15, 1.0); v.set(16, 1.0); v.set(17, 0.5); v.set(18, 1.0); v.set(19, 1.0);
+			v.set(20, -1.0); v.set(21, 1.0); v.set(22, 0.5); v.set(23, 0.0); v.set(24, 1.0);
+			v.set(25, 1.0); v.set(26, -1.0); v.set(27, 0.5); v.set(28, 1.0); v.set(29, 0.0);
 			vertices.unlock();
 			
-			indices = new IndexBuffer(3, Usage.StaticUsage);
+			indices = new IndexBuffer(6, Usage.StaticUsage);
 			var i = indices.lock();
 			i[0] = 0; i[1] = 1; i[2] = 2;
+			i[3] = 3; i[4] = 4; i[5] = 5;
 			indices.unlock();
 			
 			System.notifyOnRender(render);
@@ -74,7 +78,7 @@ class Main {
 		
 		Compute.setShader(Shaders.test_comp);
 		Compute.setTexture(computeTexunit, texture);
-		Compute.setFloat(computeLocation, 0);
+		Compute.setFloat(computeLocation, (1 + Math.sin(kha.Scheduler.time())) / 2);
 		Compute.compute(texture.width, texture.height, 1);
 		
 		g.setPipeline(pipeline);
