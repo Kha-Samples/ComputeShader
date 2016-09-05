@@ -6,6 +6,7 @@ import kha.Image;
 import kha.compute.Compute;
 import kha.compute.ConstantLocation;
 import kha.compute.Shader;
+import kha.compute.ShaderStorageBuffer;
 import kha.compute.TextureUnit;
 import kha.graphics4.FragmentShader;
 import kha.graphics4.IndexBuffer;
@@ -24,18 +25,22 @@ class Main {
 	private static var pipeline: PipelineState;
 	private static var vertices: VertexBuffer;
 	private static var indices: IndexBuffer;
+	private static var shaderStorage: ShaderStorageBuffer;
 	private static var texture: Image;
 	private static var texunit: kha.graphics4.TextureUnit;
 	private static var offset: kha.graphics4.ConstantLocation;
 	private static var computeTexunit: kha.compute.TextureUnit;
 	private static var computeLocation: kha.compute.ConstantLocation;
+	private static var computeT2: kha.compute.ConstantLocation;
 	
 	public static function main(): Void {
 		System.init({title: "ComputeShader", width: 512, height: 512}, function () {
 			texture = Image.create(512, 512, TextureFormat.RGBA128);
 			
-			computeTexunit = Shaders.test_comp.getTextureUnit("destTex");
-			computeLocation = Shaders.test_comp.getConstantLocation("sine");
+			computeTexunit = Shaders.tex_comp.getTextureUnit("destTex");
+			computeLocation = Shaders.tex_comp.getConstantLocation("sine");
+			
+			computeT2 = Shaders.move_comp.getConstantLocation("delta");
 			
 			var structure = new VertexStructure();
 			structure.add("pos", VertexData.Float3);
@@ -66,6 +71,17 @@ class Main {
 			i[0] = 0; i[1] = 1; i[2] = 2;
 			i[3] = 3; i[4] = 4; i[5] = 5;
 			indices.unlock();
+
+			shaderStorage = new ShaderStorageBuffer(6, VertexData.Float3);
+			var s = shaderStorage.lock();
+			v.set(0, -1.0); v.set(1, -1.0); v.set(2, 0.5);
+			v.set(5, 1.0); v.set(6, -1.0); v.set(7, 0.5);
+			v.set(10, -1.0); v.set(11, 1.0); v.set(12, 0.5);
+
+			v.set(15, 1.0); v.set(16, 1.0); v.set(17, 0.5);
+			v.set(20, -1.0); v.set(21, 1.0); v.set(22, 0.5);
+			v.set(25, 1.0); v.set(26, -1.0); v.set(27, 0.5);
+			shaderStorage.unlock();
 			
 			System.notifyOnRender(render);
 		});
@@ -76,11 +92,25 @@ class Main {
 		g.begin();
 		g.clear(Color.Black);
 		
-		Compute.setShader(Shaders.test_comp);
+		Compute.setShader(Shaders.tex_comp);
 		Compute.setTexture(computeTexunit, texture);
 		Compute.setFloat(computeLocation, (1 + Math.sin(kha.Scheduler.time())) / 2);
 		Compute.compute(texture.width, texture.height, 1);
+
+		Compute.setShader(Shaders.move_comp);
+		Compute.setBuffer(shaderStorage, 1);
+		Compute.setFloat(computeT2, (1 + Math.sin(kha.Scheduler.time())) / 2 );
+		Compute.compute(6, 1, 1);
+
+		// TODO: Reading the content this way doesn't work
+		var s = shaderStorage.lock();
+		trace(s[0]);
+		shaderStorage.unlock();
 		
+		// TODO: Using the ShaderStorageBuffer as a VertexBuffer does not work
+		// Could be the concept of another buffer is flawed and we need a modified VertexBuffer instead.
+		// However, this seems incompatible with having multiple elements (e.g. pos and texCoords) in a
+		// single VertexBuffer when only one is used in the compute shader. 
 		g.setPipeline(pipeline);
 		g.setMatrix(offset, FastMatrix4.rotationZ(0));
 		g.setTexture(texunit, texture);
