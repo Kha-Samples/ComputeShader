@@ -12,6 +12,7 @@ import kha.graphics4.IndexBuffer;
 import kha.graphics4.PipelineState;
 import kha.graphics4.TextureFormat;
 import kha.graphics4.Usage;
+import kha.graphics4.Access;
 import kha.graphics4.VertexBuffer;
 import kha.graphics4.VertexData;
 import kha.graphics4.VertexStructure;
@@ -73,7 +74,7 @@ class Main {
 		g.clear(Color.Black);
 		
 		Compute.setShader(Shaders.test_comp);
-		Compute.setTexture(computeTexunit, texture);
+		Compute.setTexture(computeTexunit, texture, Access.Write);
 		Compute.setFloat(computeLocation, 0);
 		Compute.compute(texture.width, texture.height, 1);
 		
