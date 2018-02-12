@@ -7,6 +7,7 @@ import kha.compute.Compute;
 import kha.compute.ConstantLocation;
 import kha.compute.Shader;
 import kha.compute.TextureUnit;
+import kha.compute.Access;
 import kha.graphics4.FragmentShader;
 import kha.graphics4.IndexBuffer;
 import kha.graphics4.PipelineState;
@@ -73,7 +74,7 @@ class Main {
 		g.clear(Color.Black);
 		
 		Compute.setShader(Shaders.test_comp);
-		Compute.setTexture(computeTexunit, texture);
+		Compute.setTexture(computeTexunit, texture, Access.Write);
 		Compute.setFloat(computeLocation, 0);
 		Compute.compute(texture.width, texture.height, 1);
 		
