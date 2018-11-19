@@ -32,7 +32,7 @@ class Main {
 	private static var computeLocation: kha.compute.ConstantLocation;
 	
 	public static function main(): Void {
-		System.init({title: "ComputeShader", width: 640, height: 480}, function () {
+		System.start({title: "ComputeShader", width: 640, height: 480}, function (_) {
 			texture = Image.create(256, 256, TextureFormat.RGBA128);
 			
 			computeTexunit = Shaders.test_comp.getTextureUnit("destTex");
@@ -64,12 +64,12 @@ class Main {
 			i[0] = 0; i[1] = 1; i[2] = 2;
 			indices.unlock();
 			
-			System.notifyOnRender(render);
+			System.notifyOnFrames(render);
 		});
 	}
 	
-	private static function render(frame: Framebuffer): Void {
-		var g = frame.g4;
+	private static function render(frames: Array<Framebuffer>): Void {
+		var g = frames[0].g4;
 		g.begin();
 		g.clear(Color.Black);
 		
