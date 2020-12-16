@@ -76,7 +76,7 @@ class Main {
 		Compute.setShader(Shaders.test_comp);
 		Compute.setTexture(computeTexunit, texture, Access.Write);
 		Compute.setFloat(computeLocation, 0);
-		Compute.compute(texture.width, texture.height, 1);
+		Compute.compute(Std.int(texture.width / 16), Std.int(texture.height / 16), 1);
 		
 		g.setPipeline(pipeline);
 		g.setMatrix(offset, FastMatrix4.rotationZ(0));
