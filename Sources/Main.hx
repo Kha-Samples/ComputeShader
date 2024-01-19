@@ -3,11 +3,9 @@ package;
 import kha.Color;
 import kha.Framebuffer;
 import kha.Image;
-import kha.compute.Compute;
-import kha.compute.ConstantLocation;
-import kha.compute.Shader;
-import kha.compute.TextureUnit;
-import kha.compute.Access;
+import kha.graphics4.ConstantLocation;
+import kha.graphics4.ComputeShader;
+import kha.graphics4.TextureUnit;
 import kha.graphics4.FragmentShader;
 import kha.graphics4.IndexBuffer;
 import kha.graphics4.PipelineState;
@@ -28,8 +26,8 @@ class Main {
 	private static var texture: Image;
 	private static var texunit: kha.graphics4.TextureUnit;
 	private static var offset: kha.graphics4.ConstantLocation;
-	private static var computeTexunit: kha.compute.TextureUnit;
-	private static var computeLocation: kha.compute.ConstantLocation;
+	private static var computeTexunit: kha.graphics4.TextureUnit;
+	private static var computeLocation: kha.graphics4.ConstantLocation;
 	
 	public static function main(): Void {
 		System.start({title: "ComputeShader", width: 640, height: 480}, function (_) {
@@ -73,10 +71,10 @@ class Main {
 		g.begin();
 		g.clear(Color.Black);
 		
-		Compute.setShader(Shaders.test_comp);
-		Compute.setTexture(computeTexunit, texture, Access.Write);
-		Compute.setFloat(computeLocation, 0);
-		Compute.compute(Std.int(texture.width / 16), Std.int(texture.height / 16), 1);
+		g.setComputeShader(Shaders.test_comp);
+		g.setImageTexture(computeTexunit, texture);
+		g.setFloat(computeLocation, 0);
+		g.compute(Std.int(texture.width / 16), Std.int(texture.height / 16), 1);
 		
 		g.setPipeline(pipeline);
 		g.setMatrix(offset, FastMatrix4.rotationZ(0));
